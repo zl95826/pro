@@ -2,9 +2,10 @@ import React, {Fragment} from 'react';
 import classes from './Burger.css';
 import BurgerIngredient  from './BurgerIngredients/BurgerIngredient';
 
+
 const burger=(props)=>{
   let transformedIngredients=Object.keys(props.ingredients).map(current=>{
-       return [...new Array(props.ingredients[current])].map((_,index)=><BurgerIngredient key={index} type={current}/>);
+       return [...new Array(props.ingredients[current])].map((_,index)=><BurgerIngredient key={current+index} type={current}/>);
     
     });
     transformedIngredients=transformedIngredients.reduce((acc,cur)=>{return acc.concat(cur)},[]);
@@ -35,6 +36,7 @@ if(transformedIngredients.length===0) {transformedIngredients=<p>Please start ad
     <hr />*/}
 {transformedIngredients}
 <BurgerIngredient type='bread-bottom'/>
+
 </div>
 );
 };
