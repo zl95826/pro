@@ -1,4 +1,4 @@
-import React, {Fragment} from 'react';
+import React from 'react';
 import classes from './Burger.css';
 import BurgerIngredient  from './BurgerIngredients/BurgerIngredient';
 

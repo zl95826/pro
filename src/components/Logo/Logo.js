@@ -1,11 +1,12 @@
-import React, {Fragment} from 'react';
+import React from 'react';
 import classes from './Logo.css';
 import burgerLogo from '../../assets/images/burger-logo.png';
 //burgerLogo here will in the end just receive the path of the image where webpack will copy it to. This will be dynamically resolved.
 const logo=(props)=>(
     <div className={classes.Logo}>
         <img src={burgerLogo} alt='logo'/>
-        {/*<img src='../../assets/images/burger-logo.png' alt='logo' />
+        {/* <div className={classes.Logo} style={{height:props.height}}> // a way to set the height of the logo
+        <img src='../../assets/images/burger-logo.png' alt='logo' />
         this will not work as you would expect. Keep in mind, the source folder is only the folder we're working in. 
         In the end, webpack will take all these files, bundle them together and create a new output folder. We cannot see that
         because we're in development mode. But once we do publish our app, we will get a real different folder where all the optimized, 
