@@ -61,28 +61,44 @@ purchaseHandler=()=> {this.setState({purchasing:true});}
 //it will be triggered by an event, this will not refer to the 
 purchaseCancelHandler=()=> {this.setState({purchasing:false});}
 purchaseContinueHandler=()=>{//alert('Add it!');
-    this.setState({loading:true});
-    const order={ingredients:this.state.ingredients,
-                price:this.state.totalPrice,//recalculate on your server side in your real project
-                customer:{
-                    name:'Lily',
-                    address:{
-                        street:'1234 St',
-                        zipCode:'97001',
-                        state:'OR'
-                    },
-                    email:'test@hotmail.com'
-                },
-                deliveryMethod:'fastest'
-    }
-    axios.post('/orders.json',order)
-        .then(response=>{this.setState({loading:false,purchasing:false});})
-        .catch(error=>{this.setState({loading:false,purchasing:false});});
+    // this.setState({loading:true});
+    // const order={ingredients:this.state.ingredients,
+    //             price:this.state.totalPrice,//recalculate on your server side in your real project
+    //             customer:{
+    //                 name:'Lily',
+    //                 address:{
+    //                     street:'1234 St',
+    //                     zipCode:'97001',
+    //                     state:'OR'
+    //                 },
+    //                 email:'test@hotmail.com'
+    //             },
+    //             deliveryMethod:'fastest'
+    // }
+    // axios.post('/orders.json',order)
+    //     .then(response=>{this.setState({loading:false,purchasing:false});})
+    //     .catch(error=>{this.setState({loading:false,purchasing:false});});
 //if you send a request to something like this URL/(slash) orders, it's going to create our orders node and store our orders beneath that node
 //and this is exactly what I want to do. Now for Firebase only, there is a special thing, you need to add .json here.
 //For your next project, you may have your own backend or other service, and you need to choose the appropriate endpoint there.
 //Now to use the post method, firebase is automatically creating and managing a list here and each list item simply get a unique ID 
 //assigned and created by firebase automatically. If we expand this object we see the order data we actually passed.
+   //test
+    // axios.get('/orders.json').then(response=>{console.log(response.data);
+    //     for (let v in response.data) {
+    //     console.log(response.data[v].price);
+    // }});
+    console.log(this.state.ingredients);
+    const queryParams=[];
+    for (let i in this.state.ingredients) {
+        queryParams.push(encodeURIComponent(i)+'='+encodeURIComponent(this.state.ingredients[i]));
+    }
+    queryParams.push('price='+this.state.totalPrice);
+    const queryString=queryParams.join('&');//'and' sign
+    this.props.history.push({
+     pathname:'/checkout',
+     search:'?'+queryString
+    });
 }
     render () {
         const disabledInfo={...this.state.ingredients};
