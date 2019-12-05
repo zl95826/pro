@@ -73,7 +73,7 @@ class Checkout extends Component {
                     Now there are two ways we can use to fix this, one is we can wrap the contact data 
                     component with this withRouter helper method.
                     the second way: The render prop function has access to all the same route props
-                     (match, location and history). Here use ...spread to make them available to your rendered
+                     (the argument props including match, location and history). Here use ...spread to make them available to your rendered
                      component
                     */}
                 </div>
