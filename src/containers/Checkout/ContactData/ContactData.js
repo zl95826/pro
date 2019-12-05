@@ -58,4 +58,4 @@ class ContactData extends Component {
         )
     }
 }
-export default withRouter(ContactData);
+export default ContactData;

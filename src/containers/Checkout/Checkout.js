@@ -67,7 +67,15 @@ class Checkout extends Component {
                         checkoutCancelled={this.checkoutCancelHandler} 
                         checkoutContinued={this.checkoutContinueHandler} />
                     {/*<Route path={this.props.match.path+'/contact-data'} component={ContactData} />*/}
-                    <Route path={this.props.match.path+'/contact-data'} render={()=><ContactData ingredients={this.state.ingredients} price={this.state.totalPrice}/> } />
+                    <Route path={this.props.match.path+'/contact-data'} render={(props)=><ContactData 
+                    ingredients={this.state.ingredients} price={this.state.totalPrice} {...props}/> } />
+                    {/* with the render method, we don't have the history object available in there.
+                    Now there are two ways we can use to fix this, one is we can wrap the contact data 
+                    component with this withRouter helper method.
+                    the second way: The render prop function has access to all the same route props
+                     (match, location and history). Here use ...spread to make them available to your rendered
+                     component
+                    */}
                 </div>
     }
 
