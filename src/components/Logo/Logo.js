@@ -1,10 +1,11 @@
 import React from 'react';
 import classes from './Logo.css';
 import burgerLogo from '../../assets/images/burger-logo.png';
+import {NavLink} from 'react-router-dom';
 //burgerLogo here will in the end just receive the path of the image where webpack will copy it to. This will be dynamically resolved.
 const logo=(props)=>(
     <div className={classes.Logo}>
-        <img src={burgerLogo} alt='logo'/>
+        <NavLink to='/' exact><img src={burgerLogo} alt='logo'/></NavLink>
         {/* <div className={classes.Logo} style={{height:props.height}}> // a way to set the height of the logo
         <img src='../../assets/images/burger-logo.png' alt='logo' />
         this will not work as you would expect. Keep in mind, the source folder is only the folder we're working in. 

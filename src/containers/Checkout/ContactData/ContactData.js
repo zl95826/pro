@@ -20,7 +20,7 @@ class ContactData extends Component {
         //be reloaded which is the default behavior. We could use event.preventDefault
         //to prevent the default which would be to send a request and reload the page but I don't want.
         event.preventDefault();
-        console.log(this.props.ingredients+' hh');
+        console.log(this.props.ingredients);
         this.setState({loading:true});
         const order={ingredients:this.props.ingredients,
                     price:this.props.price,//The total price is only calculated and stored in the burger builder.
@@ -38,7 +38,7 @@ class ContactData extends Component {
                      deliveryMethod:'fastest'
          }
          axios.post('/orders.json',order)
-             .then(response=>{this.setState({loading:false});this.props.history.push('/');/*push to the route page*/})
+             .then(response=>{this.setState({loading:false});this.props.history.push('/');/*push to the root page*/})
              .catch(error=>{this.setState({loading:false});});
     }
     render() {

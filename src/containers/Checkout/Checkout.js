@@ -68,7 +68,7 @@ class Checkout extends Component {
                         checkoutContinued={this.checkoutContinueHandler} />
                     {/*<Route path={this.props.match.path+'/contact-data'} component={ContactData} />*/}
                     <Route path={this.props.match.path+'/contact-data'} render={(props)=><ContactData 
-                    ingredients={this.state.ingredients} price={this.state.totalPrice} {...props}/> } />
+                    ingredients={this.state.ingredients} price={this.state.price} {...props}/> } />
                     {/* with the render method, we don't have the history object available in there.
                     Now there are two ways we can use to fix this, one is we can wrap the contact data 
                     component with this withRouter helper method.
