@@ -77,23 +77,30 @@ class ContactData extends Component {
                     price:this.props.price,//The total price is only calculated and stored in the burger builder.
                     //So what we actually have to do is we have to pass the total price along with the ingredients from the  
                     //BurgerBuilder to the checkout component.
-                    customer:{
-                        name:'Lily',
-                        address:{
-                             street:'1234 St',
-                             zipCode:'97001',
-                             state:'OR'
-                         },
-                         email:'test@hotmail.com'
-                     },
-                     deliveryMethod:'fastest'
+                    // customer:{
+                    //     name:'Lily',
+                    //     address:{
+                    //          street:'1234 St',
+                    //          zipCode:'97001',
+                    //          state:'OR'
+                    //      },
+                    //      email:'test@hotmail.com'
+                    //  },
+                    //  deliveryMethod:'fastest'
          }
          axios.post('/orders.json',order)
              .then(response=>{this.setState({loading:false});this.props.history.push('/');/*push to the root page*/})
              .catch(error=>{this.setState({loading:false});});
     }
     inputChangedHandler=(event,inputIdentifier)=>{
-    	
+    	const updatedOrderForm={
+			...this.state.orderForm
+			//because in the orderForm object it has nested object, so here just shallow copy ||27O
+		}
+		const updatedFormElement={...updatedOrderForm[inputIdentifier]};
+		updatedFormElement.value=event.target.value;
+		updatedOrderForm[inputIdentifier]=updatedFormElement;
+		this.setState({orderForm:updatedOrderForm});
     }
     render() {
     	const formElementsArray=[];
