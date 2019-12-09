@@ -72,9 +72,16 @@ class ContactData extends Component {
         //to prevent the default which would be to send a request and reload the page but I don't want.
         event.preventDefault();
         console.log(this.props.ingredients);
-        this.setState({loading:true});
+		this.setState({loading:true});
+		const formData={};
+		for(let i in this.state.orderForm) {
+			formData[i]=this.state.orderForm[i].value;
+		}
         const order={ingredients:this.props.ingredients,
-                    price:this.props.price,//The total price is only calculated and stored in the burger builder.
+					price:this.props.price,
+					//...formData
+					orderData:formData
+					//The total price is only calculated and stored in the burger builder.
                     //So what we actually have to do is we have to pass the total price along with the ingredients from the  
                     //BurgerBuilder to the checkout component.
                     // customer:{
@@ -112,7 +119,7 @@ class ContactData extends Component {
     			//...this.state.orderForm[key]
     		});
     	}
-        let form=(<form>
+        let form=(<form onSubmit={this.orderHandler}>
             {
             	formElementsArray.map(cur=><Input key={cur.id} {...cur.config} 
             		changed={(event)=>this.inputChangedHandler(event,cur.id)} />)
@@ -120,8 +127,9 @@ class ContactData extends Component {
             	//	elementType={cur.config.elementType}
             	//	elementConfig={cur.config.elementConfig} 
             	//	value={cur.config.value} />)
-            }
-            <Button btnType='Success' clicked={this.orderHandler}>Order</Button>
+			}
+			<Button btnType='Success'>Order</Button>
+           {/*<Button btnType='Success' clicked={this.orderHandler}>Order</Button>*/}
         </form>);
         if(this.state.loading) form=<Spinner />
         return (
