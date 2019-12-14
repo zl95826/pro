@@ -2,6 +2,7 @@ import React,{Component} from 'react';
 import CheckoutSummary from '../../components/Order/CheckoutSummary/CheckoutSummary';
 import ContactData from './ContactData/ContactData';
 import {Route} from 'react-router-dom';
+import {connect} from 'react-redux';
 class Checkout extends Component {
   /**  constructor(props) {
    *     super(props);
@@ -19,25 +20,25 @@ class Checkout extends Component {
         }
     }*/
    //how to do the above code without constructor?
-      initState = () => {
-        const queryInit = new URLSearchParams(
-            this.props.location.search
-        );
-        const ingredientsInit = {};
-        let priceInit = 0;
-        for (let param of queryInit.entries()) {
-            if (param[0] === 'price') {
-                priceInit = param[1];
-            } else {
-                ingredientsInit[param[0]] = +param[1];
-            }
-        }
-        return {
-            ingredients: ingredientsInit,
-            price: priceInit
-        };
-    };
-    state = this.initState(); 
+    //   initState = () => {
+    //     const queryInit = new URLSearchParams(
+    //         this.props.location.search
+    //     );
+    //     const ingredientsInit = {};
+    //     let priceInit = 0;
+    //     for (let param of queryInit.entries()) {
+    //         if (param[0] === 'price') {
+    //             priceInit = param[1];
+    //         } else {
+    //             ingredientsInit[param[0]] = +param[1];
+    //         }
+    //     }
+    //     return {
+    //         ingredients: ingredientsInit,
+    //         price: priceInit
+    //     };
+    // };
+    // state = this.initState(); 
     checkoutCancelHandler=()=>{
         this.props.history.goBack();
     }
@@ -63,12 +64,12 @@ class Checkout extends Component {
     render() {
         return <div>
                     <CheckoutSummary 
-                        ingredients={this.state.ingredients} 
+                        ingredients={this.props.ings} 
                         checkoutCancelled={this.checkoutCancelHandler} 
                         checkoutContinued={this.checkoutContinueHandler} />
-                    {/*<Route path={this.props.match.path+'/contact-data'} component={ContactData} />*/}
-                    <Route path={this.props.match.path+'/contact-data'} render={(props)=><ContactData 
-                    ingredients={this.state.ingredients} price={this.state.price} {...props}/> } />
+                    <Route path={this.props.match.path+'/contact-data'} component={ContactData} />
+                    {/* <Route path={this.props.match.path+'/contact-data'} render={(props)=><ContactData 
+                    ingredients={this.state.ingredients} price={this.state.price} {...props}/> } /> */}
                     {/* with the render method, we don't have the history object available in there.
                     Now there are two ways we can use to fix this, one is we can wrap the contact data 
                     component with this withRouter helper method.
@@ -80,4 +81,8 @@ class Checkout extends Component {
     }
 
 }
-export default Checkout;
+    const mapStateToProps=state=>{return {
+            ings:state.ingredients
+        }
+    }
+export default connect(mapStateToProps)(Checkout);

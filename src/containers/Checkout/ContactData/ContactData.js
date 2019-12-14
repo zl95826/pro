@@ -4,7 +4,7 @@ import styles from './ContactData.css';
 import axios from '../../../axios-orders';
 import Spinner from '../../../components/UI/Spinner/Spinner';
 import Input from '../../../components/UI/Input/Input';
-
+import connect from 'react-redux';
 class ContactData extends Component {
     state={
     	orderForm:{//orderForm property which should be a javascript object
@@ -101,13 +101,12 @@ class ContactData extends Component {
         //be reloaded which is the default behavior. We could use event.preventDefault
         //to prevent the default which would be to send a request and reload the page but I don't want.
         event.preventDefault();
-        console.log(this.props.ingredients);
 		this.setState({loading:true});
 		const formData={};
 		for(let i in this.state.orderForm) {
 			formData[i]=this.state.orderForm[i].value;
 		}
-        const order={ingredients:this.props.ingredients,
+        const order={ingredients:this.props.ings,
 					price:this.props.price,
 					//...formData
 					orderData:formData
@@ -195,4 +194,8 @@ class ContactData extends Component {
         )
     }
 }
-export default ContactData;
+const mapStateToProps=state=>{return {
+	ings:state.ingredients,
+	price:state.totalPrice
+}}
+export default conncet(mapStateToProps)(ContactData);

@@ -9,51 +9,53 @@ import withErrorHandler from '../../hoc/withErrorHandler/withErrorHandler';
 import {connect} from 'react-redux';
 import * as actionTypes from '../../store/actions';
 //name constants that you want to use as global constants in all capital characters.
-const INGREDIENT_PRICES={
-    salad:0.5,
-    bacon:0.7,
-    cheese:0.4,
-    meat:1.3}
+// const INGREDIENT_PRICES={
+//     salad:0.5,
+//     bacon:0.7,
+//     cheese:0.4,
+//     meat:1.3}
 class BurgerBuilder extends Component {
     state={
            //ingredients:null,
-            totalPrice:4,
-            purchaseable:false,
+           // totalPrice:4,
+           // purchaseable:false,
             purchasing:false,
             loading:false,
             error:false};
 updatePurchaseState=(obj)=> {
     const ingredients={...obj};
     const sum=Object.keys(ingredients).map(igKey=>ingredients[igKey]).reduce((sum,val)=>{return sum=sum+val}, 0);
-   this.setState({purchaseable:sum>0});
+    return sum>0;
 }
 //updatePurchaseState(obj) {
  //   const ingredients={...obj};
   //  const sum=Object.keys(ingredients).map(igKey=>ingredients[igKey]).reduce((sum,val)=>{return sum=sum+val}, 0);
  //  this.setState({purchaseable:sum>0});
 //}
-    addIngredientHandler=(type)=>{
-        const oldCount=this.state.ingredients[type];
-        const updatedCount=oldCount+1; 
-        const updatedIngredients={...this.state.ingredients};
-        updatedIngredients[type]=updatedCount;
-        const priceAddition=INGREDIENT_PRICES[type];
-        const oldPrice=this.state.totalPrice;
-        const newPrice=oldPrice+priceAddition;
-        this.setState({ingredients:updatedIngredients,totalPrice:newPrice});
-        this.updatePurchaseState(updatedIngredients);
-    }
 
-    removeIngredientHandler=(type)=>{const oldCount=this.state.ingredients[type];
-    if(oldCount>0) {
-        const updatedCount=oldCount-1; const updatedIngredients={...this.state.ingredients};
-        updatedIngredients[type]=updatedCount; const priceDeduction=INGREDIENT_PRICES[type];const oldPrice=this.state.totalPrice;
-        const newPrice=oldPrice-priceDeduction;
-        this.setState({ingredients:updatedIngredients,totalPrice:newPrice});
-        this.updatePurchaseState(updatedIngredients);
-    }else {return;}
+//     addIngredientHandler=(type)=>{
+//         const oldCount=this.state.ingredients[type];
+//         const updatedCount=oldCount+1; 
+//         const updatedIngredients={...this.state.ingredients};
+//         updatedIngredients[type]=updatedCount;
+//         const priceAddition=INGREDIENT_PRICES[type];
+//         const oldPrice=this.state.totalPrice;
+//         const newPrice=oldPrice+priceAddition;
+//         this.setState({ingredients:updatedIngredients,totalPrice:newPrice});
+//         this.updatePurchaseState(updatedIngredients);
+//     }
 
-}
+//     removeIngredientHandler=(type)=>{const oldCount=this.state.ingredients[type];
+//     if(oldCount>0) {
+//         const updatedCount=oldCount-1; const updatedIngredients={...this.state.ingredients};
+//         updatedIngredients[type]=updatedCount; const priceDeduction=INGREDIENT_PRICES[type];const oldPrice=this.state.totalPrice;
+//         const newPrice=oldPrice-priceDeduction;
+//         this.setState({ingredients:updatedIngredients,totalPrice:newPrice});
+//         this.updatePurchaseState(updatedIngredients);
+//     }else {return;}
+
+// }
+
 componentDidMount() {
     // axios.get('https://burger-react-project-2019.firebaseio.com/ingredients.json')
     //     .then(response=>this.setState({ingredients:response.data}))
@@ -63,7 +65,7 @@ purchaseHandler=()=> {this.setState({purchasing:true});}
 //purchaseHandler() {this.setState({purchasing:true});}
 //it will be triggered by an event, this will not refer to the 
 purchaseCancelHandler=()=> {this.setState({purchasing:false});}
-purchaseContinueHandler=()=>{//alert('Add it!');
+//purchaseContinueHandler=()=>{//alert('Add it!'); //one way without redux passing ingredients to checkout page
     // this.setState({loading:true});
     // const order={ingredients:this.state.ingredients,
     //             price:this.state.totalPrice,//recalculate on your server side in your real project
@@ -91,18 +93,22 @@ purchaseContinueHandler=()=>{//alert('Add it!');
     //     for (let v in response.data) {
     //     console.log(response.data[v].price);
     // }});
-    console.log(this.state.ingredients);
-    const queryParams=[];
-    for (let i in this.state.ingredients) {
-        queryParams.push(encodeURIComponent(i)+'='+encodeURIComponent(this.state.ingredients[i]));
+//     console.log(this.state.ingredients);
+//     const queryParams=[];
+//     for (let i in this.state.ingredients) {
+//         queryParams.push(encodeURIComponent(i)+'='+encodeURIComponent(this.state.ingredients[i]));
+//     }
+//     queryParams.push('price='+this.props.totalPrice);
+//     const queryString=queryParams.join('&');//'and' sign
+//     this.props.history.push({
+//      pathname:'/checkout',
+//      search:'?'+queryString
+//     });
+// }
+
+    purchaseContinueHandler=()=>{
+        this.props.history.push('/checkout');
     }
-    queryParams.push('price='+this.state.totalPrice);
-    const queryString=queryParams.join('&');//'and' sign
-    this.props.history.push({
-     pathname:'/checkout',
-     search:'?'+queryString
-    });
-}
     render () {
         //const disabledInfo={...this.state.ingredients};
         const disabledInfo={...this.props.ings};
@@ -117,14 +123,14 @@ purchaseContinueHandler=()=>{//alert('Add it!');
             <BuildControls ingredientAdded={this.props.onIngredientAdded} //{this.addIngredientHandler}
             ingredientDeducted={this.props.onIngredientRemoved} //{this.removeIngredientHandler} 
             disabled={disabledInfo} 
-            price={this.state.totalPrice}
-            purchaseable={this.state.purchaseable}
+            price={this.props.totalPrice}
+            purchaseable={this.updatePurchaseState(this.props.ings)}
             ordered={this.purchaseHandler}
             /></Fragment>);
             orderSummary=<OrderSummary ingredients={this.props.ings} 
             purchaseCanceled={this.purchaseCancelHandler} 
             purchaseContinued={this.purchaseContinueHandler} 
-            price={this.state.totalPrice}/>;
+            price={this.props.totalPrice}/>;
         }
         if (this.state.loading) {orderSummary=<Spinner />;}
        
