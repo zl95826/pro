@@ -4,7 +4,7 @@ import styles from './ContactData.css';
 import axios from '../../../axios-orders';
 import Spinner from '../../../components/UI/Spinner/Spinner';
 import Input from '../../../components/UI/Input/Input';
-import connect from 'react-redux';
+import {connect} from 'react-redux';
 class ContactData extends Component {
     state={
     	orderForm:{//orderForm property which should be a javascript object
@@ -47,7 +47,8 @@ class ContactData extends Component {
 				validation:{
 					required:true,
 					minLength:5,
-					maxLength:5
+					maxLength:5,
+					isNumeric:true
 				},
 				valid:false,
 				touched:false
@@ -73,7 +74,8 @@ class ContactData extends Component {
     			},
     			value:'',
 				validation:{
-					required:true
+					required:true,
+					isEmail:true
 				},
 				valid:false,
 				touched:false
@@ -140,6 +142,14 @@ class ContactData extends Component {
 		if(rules.maxLength) {
 			isValid=value.length<=rules.maxLength&&isValid;
 		}
+		if(rules.isEmail) {
+			//const pattern=//;
+			//isValid=pattern.test(value)&&isValid;
+		}
+		if(rules.isNumeric) {
+			const pattern=/^\d+$/;
+			isValid=pattern.test(value)&&isValid;
+		}
 		return isValid;
 	}
     inputChangedHandler=(event,inputIdentifier)=>{
@@ -198,4 +208,4 @@ const mapStateToProps=state=>{return {
 	ings:state.ingredients,
 	price:state.totalPrice
 }}
-export default conncet(mapStateToProps)(ContactData);
+export default connect(mapStateToProps)(ContactData);
