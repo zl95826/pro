@@ -19,9 +19,10 @@ class BurgerBuilder extends Component {
            //ingredients:null,
            // totalPrice:4,
            // purchaseable:false,
-            purchasing:false,
-            loading:false,
-            error:false};
+            purchasing:false
+           // loading:false,
+           // error:false};
+    };
 updatePurchaseState=(obj)=> {
     const ingredients={...obj};
     const sum=Object.keys(ingredients).map(igKey=>ingredients[igKey]).reduce((sum,val)=>{return sum=sum+val}, 0);
@@ -57,9 +58,11 @@ updatePurchaseState=(obj)=> {
 // }
 
 componentDidMount() {
-    // axios.get('https://burger-react-project-2019.firebaseio.com/ingredients.json')
+    this.props.onInitIngredients();
+    //axios.get('https://burger-react-project-2019.firebaseio.com/ingredients.json')
     //     .then(response=>this.setState({ingredients:response.data}))
     //     .catch(err=>this.setState({error:true}));
+    //.then(res=>{console.log(res.data);this.props.onIngredientAdded('salad')}/comment:dispatch action here)
 }
 purchaseHandler=()=> {this.setState({purchasing:true});}
 //purchaseHandler() {this.setState({purchasing:true});}
@@ -116,7 +119,7 @@ purchaseCancelHandler=()=> {this.setState({purchasing:false});}
             disabledInfo[key]=disabledInfo[key]<=0;
         }
         let orderSummary=null;
-        let burger=this.state.error?(<p>Ingredients can't be loaded!</p>):<Spinner />;
+        let burger=this.props.error?(<p>Ingredients can't be loaded!</p>):<Spinner />;
         if (this.props.ings) {
             burger= (<Fragment>
             <Burger ingredients={this.props.ings}/>
@@ -132,7 +135,7 @@ purchaseCancelHandler=()=> {this.setState({purchasing:false});}
             purchaseContinued={this.purchaseContinueHandler} 
             price={this.props.totalPrice}/>;
         }
-        if (this.state.loading) {orderSummary=<Spinner />;}
+       // if (this.state.loading) {orderSummary=<Spinner />;}
        
 return (
 <Fragment>
@@ -144,10 +147,15 @@ return (
 );
     }
 }
-const mapStateToProps=state=>{return {ings:state.ingredients,totalPrice:state.totalPrice}}
+const mapStateToProps=state=>{return {ings:state.ingredients,totalPrice:state.totalPrice,error:state.error}}
 const mapDispatchToProps=dispatch=>{return {
     onIngredientAdded:(ingName)=>dispatch(burgerBuilderActions.addIngredient(ingName)),
-    onIngredientRemoved:(ingName)=>dispatch(burgerBuilderActions.removeIngredient(ingName))
+    onIngredientRemoved:(ingName)=>dispatch(burgerBuilderActions.removeIngredient(ingName)),
+    onInitIngredients:()=>dispatch(burgerBuilderActions.initIngredients())
+    //dispatch()后的括号里，应该是一个含有type property的object，但是这里我们使用了action creator function,
+    //so let's call the function一般情况下，它返回的是一个含有type property的object,
+    //但是这里它返回的是一个function，这个时候thunk开始发挥作用它让这个function运行，it will execute the function
+    //接我们的例子，运行get，这个promise resolved，so automatically 运行then里的callback,发生了dispatch
     }
 }
 export default connect(mapStateToProps,mapDispatchToProps)(withErrorHandler(BurgerBuilder,axios));
