@@ -1,8 +1,9 @@
 import React,{Component} from 'react';
 import CheckoutSummary from '../../components/Order/CheckoutSummary/CheckoutSummary';
 import ContactData from './ContactData/ContactData';
-import {Route} from 'react-router-dom';
+import {Route,Redirect} from 'react-router-dom';
 import {connect} from 'react-redux';
+import * as actions from '../../store/actions/index';
 class Checkout extends Component {
   /**  constructor(props) {
    *     super(props);
@@ -45,12 +46,12 @@ class Checkout extends Component {
     checkoutContinueHandler=()=>{
         this.props.history.replace('checkout/contact-data');
     }
-    /*componentDidMount() {
+    componentDidMount() {
     //I won't use componentDidUpdate or anything like that, because it's not nested in some other
     //page or anything like that. Each time you load this component, it just mount again instead of updating. 
     //If you cancel it or enter another page, you remove/unmount the component, so next time you load into the component
     //you have to mount, that's the reason why using componentDidMount
-        console.log('mount');
+       /* console.log('mount');
         const query=new URLSearchParams(this.props.location.search);
         const ingredients={};
         let price=0;
@@ -60,14 +61,22 @@ class Checkout extends Component {
             console.log(+value);}
         }
         this.setState({ingredients:ingredients,totalPrice:price});
-    }*/
+        */
+       console.log("checkout componentdidMount");
+       
+    }
     render() {
-        return <div>
-                    <CheckoutSummary 
-                        ingredients={this.props.ings} 
-                        checkoutCancelled={this.checkoutCancelHandler} 
-                        checkoutContinued={this.checkoutContinueHandler} />
-                    <Route path={this.props.match.path+'/contact-data'} component={ContactData} />
+        let summary=<Redirect to="/" />
+        if(this.props.ings) {
+            const purchasedRedirect=this.props.purchased?<Redirect to="/" />:null;
+            summary=(
+            <div>
+                {purchasedRedirect}
+                <CheckoutSummary 
+            ingredients={this.props.ings} 
+            checkoutCancelled={this.checkoutCancelHandler} 
+            checkoutContinued={this.checkoutContinueHandler} />
+             <Route path={this.props.match.path+'/contact-data'} component={ContactData} />
                     {/* <Route path={this.props.match.path+'/contact-data'} render={(props)=><ContactData 
                     ingredients={this.state.ingredients} price={this.state.price} {...props}/> } /> */}
                     {/* with the render method, we don't have the history object available in there.
@@ -77,12 +86,16 @@ class Checkout extends Component {
                      (the argument props including match, location and history). Here use ...spread to make them available to your rendered
                      component
                     */}
-                </div>
+            </div>);
+        }
+        return summary;//question: why it has errors if you use {summary}?
     }
 
 }
     const mapStateToProps=state=>{return {
-            ings:state.ingredients
+            ings:state.burgerBuilder.ingredients,
+            purchased:state.order.purchased
         }
     }
+    
 export default connect(mapStateToProps)(Checkout);

@@ -2,33 +2,41 @@ import React,{Component} from 'react';
 import Order from '../../components/Order/Order';
 import axios from '../../axios-orders';
 import withErrorHandler from '../../hoc/withErrorHandler/withErrorHandler';
-
+import {connect} from 'react-redux';
+import * as actions from '../../store/actions/index';
+import Spinner from '../../components/UI/Spinner/Spinner';
 class Orders extends Component {
-    state={
-        orders:[],
-        loading:true
-    }
+    // state={
+    //     orders:[],
+    //     loading:true
+    // }
     componentDidMount() {
-        axios.get('/orders.json')
-        .then(response=>{
-            const fetchedOrders=[];
-            for (let i in response.data) {
-              // sorders.push(response.data[i].ingredients);
-              fetchedOrders.push({
-                  ...response.data[i],
-                  id:i //add one new property ID
-                });
-            }
-            this.setState({orders:fetchedOrders,loading:false});
-            console.log(fetchedOrders)})
-            .catch(response=>{this.setState({loading:false})});
+            this.props.onFetchOrders();
+                // axios.get('/order.json')
+                // .then(response=>{
+                //     //console.log(response);
+                //     const fetchedOrders=[];
+                //     for (let i in response.data) {
+                //     // sorders.push(response.data[i].ingredients);
+                //     fetchedOrders.push({
+                //         ...response.data[i],
+                //         id:i //add one new property ID
+                //         });
+                //     }
+                //     this.setState({orders:fetchedOrders,loading:false});
+                //     console.log(fetchedOrders)})
+                //     .catch(response=>{this.setState({loading:false})});
     }
     render() {
+        let orders=<Spinner />;
+        if(!this.props.loading) {
+            orders=this.props.orders.map(order=><Order key={order.id} ingredients={order.ingredients} 
+                price={+order.price}/>);
+                 //+ before order.price means to convert string to number
+        }
         return (
         <div>
-            {this.state.orders.map(order=><Order key={order.id} ingredients={order.ingredients} 
-            price={+order.price}/>)}
-            {/*+ before order.price means to convert string to number*/}
+            {orders}   
         </div>);
       {/* let display=<Spinner />
         if (!this.state.loading) {
@@ -44,4 +52,15 @@ class Orders extends Component {
         return <div>{display}</div>*/} 
     }
 }
-export default withErrorHandler(Orders,axios);
+const mapStateToProps=state=>{
+    return {
+        orders:state.order.orders,
+        loading:state.order.loading
+    }
+}
+const mapDispatchToProps=dispatch=>{
+    return {
+        onFetchOrders:()=>dispatch(actions.fetchOrders())
+    };
+};
+export default connect(mapStateToProps,mapDispatchToProps)(withErrorHandler(Orders,axios));

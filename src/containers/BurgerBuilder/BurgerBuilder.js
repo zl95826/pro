@@ -110,6 +110,7 @@ purchaseCancelHandler=()=> {this.setState({purchasing:false});}
 // }
 
     purchaseContinueHandler=()=>{
+        this.props.onInitPurchase();
         this.props.history.push('/checkout');
     }
     render () {
@@ -147,10 +148,13 @@ return (
 );
     }
 }
-const mapStateToProps=state=>{return {ings:state.ingredients,totalPrice:state.totalPrice,error:state.error}}
+const mapStateToProps=state=>{return {ings:state.burgerBuilder.ingredients,
+    totalPrice:state.burgerBuilder.totalPrice,
+    error:state.burgerBuilder.error}}
 const mapDispatchToProps=dispatch=>{return {
     onIngredientAdded:(ingName)=>dispatch(burgerBuilderActions.addIngredient(ingName)),
     onIngredientRemoved:(ingName)=>dispatch(burgerBuilderActions.removeIngredient(ingName)),
+    onInitPurchase:()=>dispatch(burgerBuilderActions.purchaseInit()),
     onInitIngredients:()=>dispatch(burgerBuilderActions.initIngredients())
     //dispatch()后的括号里，应该是一个含有type property的object，但是这里我们使用了action creator function,
     //so let's call the function一般情况下，它返回的是一个含有type property的object,
