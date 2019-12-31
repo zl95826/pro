@@ -70,7 +70,7 @@ export const authCheckState=()=>{
         const token=localStorage.getItem('token');
         if(!token) {
             dispatch(logout());
-        }else {
+        }else {//auto log in if the token is still valid
             const expirationDate=new Date(localStorage.getItem('expirationDate'));//convert string to date object
             if(expirationDate<=new Date()) {dispatch(logout());}
             else {

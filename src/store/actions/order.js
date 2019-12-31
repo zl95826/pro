@@ -56,7 +56,8 @@ export const fetchOrdersStart=()=> {
 export const fetchOrders=(token)=>{
     return dispatch=>{
         dispatch(fetchOrdersStart());
-        axios.get("/order.json?auth="+token).then(response=>{
+        axios.get("/order.json?auth="+token)//The authentication is very simple then, we just have to add a query param, questionmark auth equals to the token
+        .then(response=>{
             const fetchedOrders=[];
             for (let i in response.data) {
               // sorders.push(response.data[i].ingredients);
