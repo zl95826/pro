@@ -9,7 +9,7 @@ const buildControls=(props)=><div className={classes.BuildControls}>
         added={()=>props.ingredientAdded(val.type)} 
         key={val.label} label={val.label} 
         deducted={()=>props.ingredientDeducted(val.type)}/>)}
-        <button className={classes.OrderButton} disabled={!props.purchaseable} onClick={props.ordered}>Order Now</button>
+        <button className={classes.OrderButton} disabled={!props.purchaseable} onClick={props.ordered}>{props.isAuth?'ORDER NOW':'SIGN UP TO ORDER'}</button>
         </div>;
 //const buildControls=(props)=><div className={classes.BuildControls}>{controls.map(val=><BuildControl added={props.ingredientAdded} key={val.label} label={val.label} type={val.type}/>)}</div>;
 export default buildControls;

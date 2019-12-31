@@ -64,7 +64,15 @@ componentDidMount() {
     //     .catch(err=>this.setState({error:true}));
     //.then(res=>{console.log(res.data);this.props.onIngredientAdded('salad')}/comment:dispatch action here)
 }
-purchaseHandler=()=> {this.setState({purchasing:true});}
+purchaseHandler=()=> {
+    if(this.props.isAuthenticated) {
+        this.setState({purchasing:true});
+    }else {
+        this.props.onSetAuthRedirectPath('/checkout');
+        this.props.history.push('/auth');
+    }
+    
+   }
 //purchaseHandler() {this.setState({purchasing:true});}
 //it will be triggered by an event, this will not refer to the 
 purchaseCancelHandler=()=> {this.setState({purchasing:false});}
@@ -134,6 +142,7 @@ purchaseCancelHandler=()=> {this.setState({purchasing:false});}
             orderSummary=<OrderSummary ingredients={this.props.ings} 
             purchaseCanceled={this.purchaseCancelHandler} 
             purchaseContinued={this.purchaseContinueHandler} 
+            isAuth={this.props.isAuthenticated}
             price={this.props.totalPrice}/>;
         }
        // if (this.state.loading) {orderSummary=<Spinner />;}
@@ -148,14 +157,18 @@ return (
 );
     }
 }
-const mapStateToProps=state=>{return {ings:state.burgerBuilder.ingredients,
+const mapStateToProps=state=>{return {
+    ings:state.burgerBuilder.ingredients,
     totalPrice:state.burgerBuilder.totalPrice,
-    error:state.burgerBuilder.error}}
+    error:state.burgerBuilder.error,
+    isAuthenticated:state.auth.token!==null
+}}
 const mapDispatchToProps=dispatch=>{return {
     onIngredientAdded:(ingName)=>dispatch(burgerBuilderActions.addIngredient(ingName)),
     onIngredientRemoved:(ingName)=>dispatch(burgerBuilderActions.removeIngredient(ingName)),
     onInitPurchase:()=>dispatch(burgerBuilderActions.purchaseInit()),
-    onInitIngredients:()=>dispatch(burgerBuilderActions.initIngredients())
+    onInitIngredients:()=>dispatch(burgerBuilderActions.initIngredients()),
+    onSetAuthRedirectPath:(path)=>dispatch(burgerBuilderActions.setAuthRedirectPath(path))
     //dispatch()后的括号里，应该是一个含有type property的object，但是这里我们使用了action creator function,
     //so let's call the function一般情况下，它返回的是一个含有type property的object,
     //但是这里它返回的是一个function，这个时候thunk开始发挥作用它让这个function运行，it will execute the function
