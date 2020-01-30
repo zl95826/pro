@@ -2,6 +2,7 @@
 //Purpose: use Redux to rewrite what happend after clicking the order button
 import * as actionTypes from './actionTypes';
 import axios from '../../axios-orders';
+import { useImperativeHandle } from 'react';
 export const purchaseBurgerSuccess=(id,orderData)=> {
     return {
         type:actionTypes.PURCHASE_BURGER_SUCCESS,
@@ -53,10 +54,11 @@ export const fetchOrdersStart=()=> {
         type:actionTypes.FETCH_ORDERS_START
     }
 }
-export const fetchOrders=(token)=>{
+export const fetchOrders=(token,userId)=>{
     return dispatch=>{
         dispatch(fetchOrdersStart());
-        axios.get("/order.json?auth="+token)//The authentication is very simple then, we just have to add a query param, questionmark auth equals to the token
+        const queryParams='?auth='+token+'&orderBy="userId"&equalTo="'+userId+'"';
+        axios.get("/order.json"+queryParams)//The authentication is very simple then, we just have to add a query param, questionmark auth equals to the token
         .then(response=>{
             const fetchedOrders=[];
             for (let i in response.data) {

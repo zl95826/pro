@@ -137,12 +137,12 @@ purchaseCancelHandler=()=> {this.setState({purchasing:false});}
             disabled={disabledInfo} 
             price={this.props.totalPrice}
             purchaseable={this.updatePurchaseState(this.props.ings)}
+            isAuth={this.props.isAuthenticated}
             ordered={this.purchaseHandler}
             /></Fragment>);
             orderSummary=<OrderSummary ingredients={this.props.ings} 
             purchaseCanceled={this.purchaseCancelHandler} 
             purchaseContinued={this.purchaseContinueHandler} 
-            isAuth={this.props.isAuthenticated}
             price={this.props.totalPrice}/>;
         }
        // if (this.state.loading) {orderSummary=<Spinner />;}

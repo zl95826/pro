@@ -61,9 +61,9 @@ class Checkout extends Component {
             console.log(+value);}
         }
         this.setState({ingredients:ingredients,totalPrice:price});
-        */
+        
        console.log("checkout componentdidMount");
-       
+       */
     }
     render() {
         let summary=<Redirect to="/" />
