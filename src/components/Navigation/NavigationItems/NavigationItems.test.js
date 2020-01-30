@@ -5,12 +5,16 @@ import NavigationItems from './NavigationItems';
 import NavigationItem from './NavigationItem/NavigationItem';
 configure({adapter:new Adapter()});
 describe('<NavigationItems />', ()=>{
+    let wrapper;
+    beforeEach(()=>{
+        wrapper=shallow(<NavigationItems />);
+    });//We can do some general set up. beforeEach takes a function as an argument
+                       //and this is the function which will get executed before each test.
     it('it should render two <NavigationItem /> elements if not authenticated.',()=>{
-        const wrapper=shallow(<NavigationItems />);
         expect(wrapper.find(NavigationItem)).toHaveLength(2);
     });
     it('it should render three <NavigationItem /> elements if authenticated.',()=>{
-        const wrapper=shallow(<NavigationItems isAuthenticated/>);
+        wrapper=shallow(<NavigationItems isAuthenticated/>);
         expect(wrapper.find(NavigationItem)).toHaveLength(3);
     });
     
