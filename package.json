@@ -2,6 +2,7 @@
   "name": "react-complete-guide",
   "version": "0.1.0",
   "private": true,
+  "homepage": "https://zl95826.github.io/test",
   "dependencies": {
     "autoprefixer": "7.1.2",
     "axios": "^0.19.0",
