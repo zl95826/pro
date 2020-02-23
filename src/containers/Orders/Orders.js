@@ -35,7 +35,7 @@ class Orders extends Component {
                  //+ before order.price means to convert string to number
         }
         return (
-        <div>
+        <div><h1 style={{textAlign:'center'}}>My Orders</h1>
             {orders}   
         </div>);
       {/* let display=<Spinner />
